@@ -110,16 +110,26 @@ see [Known limitations](#known-limitations).
 
 ## Usage
 
-1. Create a project from the **metric Architectural template**.
-2. **Load a door family and a window family** (e.g. `M_Single-Flush`, `M_Fixed`). Without them,
-   openings are skipped with a warning — walls still import.
-3. Click **BIMScript → Import BIMScript** and pick a program `.txt`.
-4. Accept the IFC prompt and choose an output `.ifc` path.
+1. Create a project from the **`DefaultMetric.rte`** template. It ships with door and window
+   families already loaded (7 door and 17 window types on Revit 2027), so the sample imports
+   with no extra downloads. See the note below if you use a different template.
+2. Click **BIMScript → Import BIMScript** and pick a program `.txt`.
+3. Accept the IFC prompt and choose an output `.ifc` path.
 
 The IFC export runs in a **separate transaction** from the model import, so a failed export never
 rolls back geometry you already created.
 
 Expected result for the bundled sample: **18 walls, 3 doors, 7 windows**.
+
+> **Doors and windows need a loaded family.** The plugin places wall-hosted family instances; it
+> does not author families. If the project has no door or window family, those elements are
+> skipped with a warning and **the walls still import**.
+>
+> Recent Revit versions no longer install the architectural family library locally — the content
+> moved online, and `…\Libraries\English\US\` may contain only a placeholder pointing at
+> Autodesk's content site. If your template has no door/window families, either start from
+> `DefaultMetric.rte`, or fetch them with **Insert → Load Autodesk Family** (or
+> **Load Family**, if you have a local library) before running the import.
 
 ### Output artifacts
 
@@ -293,8 +303,10 @@ serialisation.
 
 ## Known limitations
 
-- **Families are required.** Door/window import needs an architectural door and window family
-  loaded in the project; otherwise those elements are skipped with a warning.
+- **Families are required.** Door/window import needs a door and window family loaded in the
+  project; otherwise those elements are skipped with a warning (walls still import).
+  `DefaultMetric.rte` provides both; recent Revit versions no longer install the family library
+  locally.
 - **Sizing is best-effort.** The adapter duplicates a loaded family type and sets `Width` /
   `Height` type parameters. Families without them keep their default size and warn.
 - **Wall thickness** is recorded in the BuildPlan but not yet reflected in distinct Revit wall
@@ -318,7 +330,7 @@ serialisation.
 | Symptom | Cause / response |
 |---|---|
 | No BIMScript tab | Register the folder *containing* `BIMScript.extension`, then reload pyRevit |
-| Doors/windows skipped | Load an architectural door/window family into the project |
+| Doors/windows skipped | No door/window family in the project. Start from `DefaultMetric.rte`, or use **Insert → Load Autodesk Family** — recent Revit versions ship the library online rather than locally |
 | `BIMScript_*` only in Comments | Shared-parameter binding failed; IFC property validation will likely fail too — keep the warning |
 | IFC export fails, Revit model intact | Expected isolation. Check exporter installation, output-path permissions, and the pyRevit log |
 | IFC written but scan fails | Inspect the failed checks in the sidecar before using the file |
