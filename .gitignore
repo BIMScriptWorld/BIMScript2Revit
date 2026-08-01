@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# BIMScript2Revit export artifacts (regenerate by running the plugin)
+*.ifc
+*.ifc.bimscript.json
+*.ifc.validation.json

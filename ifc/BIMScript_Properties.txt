@@ -1,0 +1,5 @@
+# BIMScript instance properties for Revit IFC export
+PropertySet:	BIMScript_Properties	I	IfcWall, IfcDoor, IfcWindow
+	BIMScript_Id	Text	BIMScript_Id
+	BIMScript_Material	Text	BIMScript_Material
+	BIMScript_Condition	Text	BIMScript_Condition
